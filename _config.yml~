@@ -82,7 +82,7 @@ JB :
   comments :
     provider : disqus
     disqus :
-      short_name : ericwang1229githubio
+      short_name : jekyllbootstrap
     livefyre :
       site_id : 123
     intensedebate :
