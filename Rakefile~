@@ -49,7 +49,7 @@ task :post do
   tags = ENV["tags"] || "[]"
   category = ENV["category"] || ""
   category = "\"#{category.gsub(/-/,' ')}\"" if !category.empty?
-  slug = Hz2py.do(title, :join_with => '-', :to_simplified => true)
+  slug = hz2py.do(title, :join_with => '-', :to_simplified => true)
   slug = slug.downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '')
   begin
     date = (ENV['date'] ? Time.parse(ENV['date']) : Time.now).strftime('%Y-%m-%d')
