@@ -42,7 +42,13 @@ note: since rubygems version number updates all the time, it is better to instal
 
 You would like to make sure your site works before you push it to GitHub, because sometimes GitHub email does not tell you the detailed error.
 
-# It is better to clone Jekyll-bootstrap
+# It is better to clone Jekyll-bootstrap as your theme
+
+1, install rake so you can use rake to do new post
+	sudo install apt-get rake
+
+2, Make jekyll bootstrap rakefile [support Chinese and Categroies](http://www.soooldier.com/blog/2013/04/27/gai-jin-jekyll-bootstrapde-rakefile/)
+
 
 [1]: http://heatware.net/ruby-rails/how-to-install-rubygems-linux-ubuntu-10/
 [2]: http://jekyllcn.com/
