@@ -53,18 +53,26 @@ tags: []
 			donchian_min = lambda nparray: min(nparray)
 			self.df[self.symbol+".Donchian_upper"] = pd.rolling_apply(self.df[self.high_index], period, donchian_max)
 			self.df[self.symbol+".Donchian_lower"] = pd.rolling_apply(self.df[self.low_index], period, donchian_min)
-		def plot_candle(self):
+		def plot_candle(self, **kwargs):
 			self.dt_num_index = self.symbol + ".DTN"
 			self.df[self.dt_num_index] = self.df[self.datetime_index].map(date2num)
 			fig, (ax1, ax2) = plt.subplots(2, sharx=True)
 			candlestick(ax1, self.df[[self.dt_num_index, self.open_index, self.close_index, self.high_index, self.low_index]].values)
 			ax2.plot(self.df[self.dt_num_index], self.df[self.volume_index])
+			self.__add_indicator_plot(self, ax1, ax2, kwargs)
 			plt.show()
-		def plot_price(self):
+		def plot_price(self, *args):
 			self.dt_num_index = self.symbol + ".DTN"
 			self.df[self.dt_num_index] = self.df[self.datetime_index].map(date2num)
 			fig, (ax1, ax2) = plt.subplots(2, sharx=True)
 			ax1.plot(self.df[self.dt_num_index], self.df[self.close_index])
 			ax2.plot(self.df[self.dt_num_index], self.df[self.volume_index])
+			self.__add_indicator_plot(self, ax1, ax2, kwargs)
 			plt.show()
+		def __add_indicator_plot(self, ax1, ax2, **kwargs):
+			for ax, indicator in kwargs:
+				if ax == 1:
+					ax1.plot(self.df[self.dt_num_index], self.df[self.symbol+"."+indicator])
+				elif ax == 2:
+					ax2.plot(self.df[self.dt_num_index], self.df[self.symbol+"."+indicator])
 	
