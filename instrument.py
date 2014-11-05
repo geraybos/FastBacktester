@@ -41,15 +41,17 @@ class instrument():
 		self.df = self.df[self.df[self.volume_index]>0]
 
 	def ewbband(self, halflife):
-		df[self.symbol+'.ewma'] = pd.ewma(df[self.close_index].shift(1), halflife)
-		df[self.symbol+'.ewmstd'] = pd.ewmstd(df[self.close_index].shift(1), halflife)
-		df[self.symbol+'.ewbb_upper'] = df[self.symbol+'.ewma'] + df[self.symbol+'.ewmstd']
-		df[self.symbol+'.ewbb_lower'] = df[self.symbol+'.ewma'] - df[self.symbol+'.ewmstd']
+		self.df[self.symbol+'.ewma'] = pd.ewma(self.df[self.close_index].shift(1), halflife)
+		self.df[self.symbol+'.ewmstd'] = pd.ewmstd(self.df[self.close_index].shift(1), halflife)
+		self.df[self.symbol+'.ewbb_upper'] = self.df[self.symbol+'.ewma'] + self.df[self.symbol+'.ewmstd']
+		self.df[self.symbol+'.ewbb_lower'] = self.df[self.symbol+'.ewma'] - self.df[self.symbol+'.ewmstd']
 	def donchian(self, period):
 		donchian_max = lambda nparray: max(nparray)
 		donchian_min = lambda nparray: min(nparray)
-		self.df[self.symbol+".Donchian_upper"] = pd.rolling_apply(self.df[self.high_index], period, donchian_max)
-		self.df[self.symbol+".Donchian_lower"] = pd.rolling_apply(self.df[self.low_index], period, donchian_min)
+		self.df[self.symbol+".donchian_upper"] = pd.rolling_apply(self.df[self.high_index], period, donchian_max)
+		self.df[self.symbol+".donchian_lower"] = pd.rolling_apply(self.df[self.low_index], period, donchian_min)
+	def std(self, period):
+		self.df[self.symbol.+".std"] = pd.rolling_std(self.df[
 
 	def plot_candle(self, trades=None, **kwargs):
 		self.__datetime2num(self)

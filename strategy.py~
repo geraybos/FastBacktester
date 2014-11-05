@@ -15,10 +15,14 @@ class strategy():
 			else:
 				self.df = pd.merge(self.df, i.df, left_on=self.datetime_index, right_on=i.datetime_index)
 	def run(self):
-		pass
+		foreach row in self.df:
+			new_order = self.handle_data(self, row, self.capital)
+			while len(x)>0:
+				self.capital.add_order(new_order)
+				new_order = self.handle_data(self, row, self.capital)
 	def plot_total_pnl(self):
 		pass
 	def plot_symbol(self, symbol):
 		pass
-	def handle_data(self):
+	def handle_data(self, market_data, capital):
 		pass

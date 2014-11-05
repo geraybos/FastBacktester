@@ -14,7 +14,6 @@ class capital():
 		
 	def new_trade(self, datetime, symbol, quantity, price, commission):
 		self.free_margin -= commission
-		
 		if symbol.instrument_type == enum.InstrumentType.Stock:
 			if quantity > 0:
 				self.free_margin -= quantity*price*symbol.margin_ratio
@@ -30,14 +29,15 @@ class capital():
 					self.states[symbol]['position'] = 0
 					self.states[symbol]['avg_price'] = 0
 				else:
+					pass
+					#TODO
 				#TODO: margin check
 		elif symbol.instrument_type == enum.InstrumentType.Future:
 			self.free_margin -= abs(quantity*price*symbol.margin_ratio)
-
-		self.orders.insert(
+		self.orders[len(self.orders)+1] = [datetime, symbol, quantity, price, commission, self.free_margin, self.get_pnl(self)]
 		
-
-	def get_total_equity(self):
-		temp = 0
+	def get_pnl(self):
+		pnl = 0
 		foreach key,val in self.positions:
-			temp += 
+			temp += val['position']*(val['close_price']-val['avg_price'])
+		return temp
