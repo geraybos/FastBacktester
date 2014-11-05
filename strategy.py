@@ -22,6 +22,6 @@ class strategy():
 	def plot_total_pnl(self):
 		pass
 	def plot_symbol(self, symbol):
-		pass
+		symbol.plot_price()
 	def handle_data(self, market_data, capital):
 		pass

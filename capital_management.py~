@@ -12,29 +12,35 @@ class capital():
 			self.states[symbol] = {'position':0, 'close_price':0, 'avg_price':0}
 		self.orders = pd.dateframe(columns=['Datetime','Symbol','Quantity','Price','Commission','FreeMargin','PnL'])
 		
-	def new_trade(self, datetime, symbol, quantity, price, commission):
-		self.free_margin -= commission
-		if symbol.instrument_type == enum.InstrumentType.Stock:
-			if quantity > 0:
-				self.free_margin -= quantity*price*symbol.margin_ratio
-				self.states[symbol][avg_price] = (self.states[symbol]['position']*self.states[symbol]['avg_price']+quantity*price)/(self.states[symbol]['position']+quantity)
-				self.states[symbol]['position'] += quantity
-			elif quantity < 0:
-				if self.states[symbol]['position'] > -quantity:
-					self.free_margin += -quantity*price*symbol.margin_ratio
-					self.states[symbol]['avg_price'] = (self.states[symbol]['position']*self.states[symbol]['avg_price']+quantity*price)/(self.states[symbol]['position']+quantity)
+	def new_trade(self, orders):
+		foreach order in orders:
+			datetime = order["Datetime"]
+			symbol = order['Symbol']
+			quantity = order['Quantity']
+			price = order['Price']
+			commission = order['Commission']
+			self.free_margin -= commission
+			if symbol.instrument_type == enum.InstrumentType.Stock:
+				if quantity > 0:
+					self.free_margin -= quantity*price*symbol.margin_ratio
+					self.states[symbol][avg_price] = (self.states[symbol]['position']*self.states[symbol]['avg_price']+quantity*price)/(self.states[symbol]['position']+quantity)
 					self.states[symbol]['position'] += quantity
-				elif self.states[symbol]['position']+quantity == 0:
-					self.free_margin += -quantity*price*symbol.margin_ratio
-					self.states[symbol]['position'] = 0
-					self.states[symbol]['avg_price'] = 0
-				else:
-					pass
-					#TODO
-				#TODO: margin check
-		elif symbol.instrument_type == enum.InstrumentType.Future:
-			self.free_margin -= abs(quantity*price*symbol.margin_ratio)
-		self.orders[len(self.orders)+1] = [datetime, symbol, quantity, price, commission, self.free_margin, self.get_pnl(self)]
+				elif quantity < 0:
+					if self.states[symbol]['position'] > -quantity:
+						self.free_margin += -quantity*price*symbol.margin_ratio
+						self.states[symbol]['avg_price'] = (self.states[symbol]['position']*self.states[symbol]['avg_price']+quantity*price)/(self.states[symbol]['position']+quantity)
+						self.states[symbol]['position'] += quantity
+					elif self.states[symbol]['position']+quantity == 0:
+						self.free_margin += -quantity*price*symbol.margin_ratio
+						self.states[symbol]['position'] = 0
+						self.states[symbol]['avg_price'] = 0
+					else:
+						pass
+						#TODO
+					#TODO: margin check
+			elif symbol.instrument_type == enum.InstrumentType.Future:
+				self.free_margin -= abs(quantity*price*symbol.margin_ratio)
+			self.orders[len(self.orders)+1] = [datetime, symbol, quantity, price, commission, self.free_margin, self.get_pnl(self)]
 		
 	def get_pnl(self):
 		pnl = 0

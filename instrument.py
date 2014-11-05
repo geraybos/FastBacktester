@@ -3,6 +3,7 @@ from matplotlib.dates import date2num
 from matplotlib import pyplot as plt
 from matplotlib.finance import candlestick
 from datetime import datetime
+from enum import InstrumentType
 
 def str2dt(format):
 	def fstr2dt(str):
@@ -10,17 +11,21 @@ def str2dt(format):
 	return fstr2dt
 
 class instrument():
-	def __init__(self, symbol, margin_ratio=None, instrument_type):
+	def __init__(self, symbol, margin_ratio=None, instrument_type, point_value=None):
 		self.symbol = symbol
 		if margin_ratio is None:
 			self.margin_ratio = 1
 		self.instrument_type = instrument_type
+		if self.instrument_type == InstrumentType.Future:
+			assert not point_value is None
+			self.point_value = point_value
+		self.df = pd.dataframe()
 
 	def attach_historical_candles(self, path, date_index=None, open_index=None,
 				high_index=None, low_index=None, close_index=None,
 				date_format=None):
 		self.path = path
-		self.df = pd.read_csv(path)
+		self.df = pd.concat(self.df, pd.read_csv(path))
 		if date_index is None:
 			self.date_index = "Date"
 		if open_index is None:

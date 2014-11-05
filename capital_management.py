@@ -47,3 +47,6 @@ class capital():
 		foreach key,val in self.positions:
 			temp += val['position']*(val['close_price']-val['avg_price'])
 		return temp
+
+	def get_symbol_trade(self, symbol):
+		return self.orders[self.orders["Symbol"] == symbol]
