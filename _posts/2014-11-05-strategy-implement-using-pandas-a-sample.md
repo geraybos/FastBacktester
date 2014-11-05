@@ -43,16 +43,22 @@ tags: []
 			self.df[self.datetime_index] = df[self.date_index].map(str2dt("%Y-%m-%d"))
 		def clean_data(self):
 			df = data[data[volume]>0]
-		def EWBBand(self, halflife):
+		def ewbb(self, halflife):
 			df[self.symbol+'.ewma'] = pd.ewma(df[self.close_index].shift(1), halflife)
 			df[self.symbol+'.ewmstd'] = pd.ewmstd(df[self.close_index].shift(1), halflife)
 			df[self.symbol+'.ewbb_upper'] = df[self.symbol+'.ewma'] + df[self.symbol+'.ewmstd']
 			df[self.symbol+'.ewbb_lower'] = df[self.symbol+'.ewma'] - df[self.symbol+'.ewmstd']
-		def Donchian(self, period):
+		def ewma(self, halflife):
+			# TODO:			
+			pass
+		def ewmacd(self, halflife1, halflife2):
+			# TODO:
+			pass
+		def donchian(self, period):
 			donchian_max = lambda nparray: max(nparray)
 			donchian_min = lambda nparray: min(nparray)
-			self.df[self.symbol+".Donchian_upper"] = pd.rolling_apply(self.df[self.high_index], period, donchian_max)
-			self.df[self.symbol+".Donchian_lower"] = pd.rolling_apply(self.df[self.low_index], period, donchian_min)
+			self.df[self.symbol+".donchian_upper"] = pd.rolling_apply(self.df[self.high_index], period, donchian_max)
+			self.df[self.symbol+".donchian_lower"] = pd.rolling_apply(self.df[self.low_index], period, donchian_min)
 		def plot_candle(self, **kwargs):
 			self.dt_num_index = self.symbol + ".DTN"
 			self.df[self.dt_num_index] = self.df[self.datetime_index].map(date2num)
