@@ -73,15 +73,14 @@ class instrument():
 		ax2.plot(self.df[self.dt_num_index], self.df[self.volume_index])
 		self.__add_indicator_plot(self, ax1, ax2, kwargs)
 		if not trades is None:
-			self.__plot_trades(self, ax1, trades)
+			self.__plot_trades(self, trades)
 		plt.show()
-	def __plot_trades(self, ax, trades):
+	def __plot_trades(self, trades):
 		buys = [(x["Datetime"], x["Price"] for x in trades if  x['Quantity']>0 ]
 		buy_datetimes, buy_values = zip(*buys)
-		ax.plot(buy_dates, buy_values, "^", markersize = 5, color = 'm')
 		sells = [(x["Datetime"], x["Price"] for x in trades if  x['Quantity']<0 ]
 		sell_datetimes, sell_values = zip(*sells)
-		ax.plot(sell_dates, sell_values, "v", markersize = 5, color = 'k')
+		
 	def __add_pnl(self, pnl):
 		pass
 	def __datetime2num(self):
@@ -93,5 +92,3 @@ class instrument():
 				ax1.plot(self.df[self.dt_num_index], self.df[self.symbol+"."+indicator])
 			elif ax == 2:
 				ax2.plot(self.df[self.dt_num_index], self.df[self.symbol+"."+indicator])
-			else:
-				
