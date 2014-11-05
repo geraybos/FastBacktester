@@ -1,0 +1,8 @@
+---
+layout: post
+title: "Simple turtle strategy backtest on A stocks"
+description: ""
+category: 
+tags: []
+---
+{% include JB/setup %}
