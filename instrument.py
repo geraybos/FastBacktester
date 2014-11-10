@@ -12,6 +12,9 @@ def str2dt(format):
 
 class instrument():
 	def __init__(self, symbol, margin_ratio=None, instrument_type, point_value=None):
+		'''Init an instrument, either stock or future. 
+		For stock, the margin_ratio should be 1 for default.
+		For Furture, you need to give margin_ratio and point_value.'''
 		self.symbol = symbol
 		if margin_ratio is None:
 			self.margin_ratio = 1
@@ -24,10 +27,11 @@ class instrument():
 	def attach_historical_candles(self, path, date_index=None, open_index=None,
 				high_index=None, low_index=None, close_index=None,
 				date_format=None):
+		'''Add historical candle data to instrument instance'''
 		self.path = path
 		self.df = pd.concat(self.df, pd.read_csv(path))
 		if date_index is None:
-			self.date_index = "Date"
+			self.date_index = "Date"		
 		if open_index is None:
 			self.open_index = symbol + ".Open"
 		if close_index is None:
