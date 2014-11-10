@@ -44,7 +44,7 @@ class instrument():
 			self.low_index = symbol + ".Low"
 		if volume_index is None:
 			self.volume_index = symbol + ".Volume"
-		self.datetime_index = symbol + ".Datetime"	
+		self.datetime_index = "DateTime"	
 		if date_format is None:
 			self.date_format = "%Y-%m-%d"
 		self.df[self.datetime_index] = df[self.date_index].map(str2dt("%Y-%m-%d"))	

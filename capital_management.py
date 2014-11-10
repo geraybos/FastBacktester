@@ -12,7 +12,7 @@ class capital():
 			self.states[instrument] = {'position':0, 'close_price':0, 'avg_price':0}
 		self.orders = pd.dateframe(columns=['Datetime','instrument','Quantity','Price','Commission','FreeMargin','PnL'])
 		
-	def new_trade(self, orders):
+	def add_orders(self, orders):
 		foreach order in orders:
 			datetime = order["Datetime"]
 			instrument = order['instrument']
@@ -28,10 +28,9 @@ class capital():
 				elif quantity < 0:
 					if self.states[instrument]['position'] > -quantity:
 						self.free_margin += -quantity*price*instrument.margin_ratio
-						self.states[instrument]['avg_price'] = (self.states[instrument]['position']*self.states[instrument]['avg_price']+quantity*price)/(self.states[instrument]['position']+quantity)
 						self.states[instrument]['position'] += quantity
 					elif self.states[instrument]['position'] + quantity == 0:
-						self.free_margin += -quantity*price*instrument.margin_ratio
+						self.free_margin += -quantity*price*instrument.margin_ratio 
 						self.states[instrument]['position'] = 0
 						self.states[instrument]['avg_price'] = 0
 					else:
