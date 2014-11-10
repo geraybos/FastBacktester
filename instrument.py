@@ -22,12 +22,14 @@ class instrument():
 		if self.instrument_type == InstrumentType.Future:
 			assert not point_value is None
 			self.point_value = point_value
+		else:
+			self.point_value = 1
 		self.df = pd.dataframe()
 
 	def attach_historical_candles(self, path, date_index=None, open_index=None,
 				high_index=None, low_index=None, close_index=None,
 				date_format=None):
-		'''Add historical candle data to instrument instance'''
+		'''Add historical candle data to instrument instance.'''
 		self.path = path
 		self.df = pd.concat(self.df, pd.read_csv(path))
 		if date_index is None:
@@ -47,19 +49,26 @@ class instrument():
 			self.date_format = "%Y-%m-%d"
 		self.df[self.datetime_index] = df[self.date_index].map(str2dt("%Y-%m-%d"))	
 	def clean_data(self):
+		'''Candle data cleaning.'''
 		self.df = self.df[self.df[self.volume_index]>0]
+	def get_daily_candle(self):
+		'''Create daily candle data from existing dataframe'''
+		self.daily_df = pd.dataframe()
 
 	def ewbband(self, halflife):
+		'''Create Expontenial Weighted Bollinger Band.'''
 		self.df[self.symbol+'.ewma'] = pd.ewma(self.df[self.close_index].shift(1), halflife)
 		self.df[self.symbol+'.ewmstd'] = pd.ewmstd(self.df[self.close_index].shift(1), halflife)
 		self.df[self.symbol+'.ewbb_upper'] = self.df[self.symbol+'.ewma'] + self.df[self.symbol+'.ewmstd']
 		self.df[self.symbol+'.ewbb_lower'] = self.df[self.symbol+'.ewma'] - self.df[self.symbol+'.ewmstd']
 	def donchian(self, period):
+		'''Create Donchian Channel.'''
 		donchian_max = lambda nparray: max(nparray)
 		donchian_min = lambda nparray: min(nparray)
 		self.df[self.symbol+".donchian_upper"] = pd.rolling_apply(self.df[self.high_index], period, donchian_max)
 		self.df[self.symbol+".donchian_lower"] = pd.rolling_apply(self.df[self.low_index], period, donchian_min)
 	def std(self, period):
+		'''Create Standard Dev.'''
 		self.df[self.symbol.+".std"] = pd.rolling_std(self.df[
 
 	def plot_candle(self, trades=None, **kwargs):
