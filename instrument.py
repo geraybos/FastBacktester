@@ -114,4 +114,5 @@ class instrument():
 			elif ax == 2:
 				ax2.plot(self.df[self.dt_num_index], self.df[self.symbol+"."+indicator])
 			else:
+				pass
 				
